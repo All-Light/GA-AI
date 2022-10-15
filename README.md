@@ -1,5 +1,8 @@
 [# GA-AI]
 
+Be sure to use the virtual environment when starting any file (go to /virtualenv/Scripts/activate)
+
+
 https://towardsdatascience.com/https-medium-com-rachelwiles-have-we-solved-the-problem-of-handwriting-recognition-712e279f373b
 
 https://mlfromscratch.com/neural-networks-explained/ 
