@@ -1,6 +1,7 @@
 from binascii import b2a_base64
 from code import interact
 from sqlite3 import dbapi2
+from tkinter import Y
 from xml.etree.ElementPath import prepare_predicate
 import numpy as np # import numpy, simplifies matrixes and linear algebra A LOT  //Problem för mig med denna rad.
 import math # imports math library, holds a lot of essential math 
@@ -78,7 +79,16 @@ def gradient_decent(X, Y, iterations, alpha):
     for i in range (iterations):
         Z1, A1, Z2, A2 = forword_prop(W1, b1 ,W2, b2)
         dW1, db1, dW2, db2 =back_prop(Z1, A1, Z2, A2, X, Y)
-
+        W1,b1,W2, b2 = uptate_parmas(W1, b1, W2, b2, dW1, db1, dW2, db2, alpha)
+        if i % 50 == 0:
+            print("Iteratiom",i)
+            print("Accurcy", get_accurcy(get_prediction(A2),Y))
+            if(i % 10 == 0):
+                print("interation", i)
+                print("accurcy", get_accurcy(get_prediction(A2),Y))
+        return W1, b1, W2, b2
+ 
+ W1, b1, W2, b2 = gradient_decent(X_train, Y_train, 500, 0.1)
 
 
 #25:11
