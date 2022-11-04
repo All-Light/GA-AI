@@ -81,15 +81,13 @@ def gradient_decent(X, Y, iterations, alpha):
         dW1, db1, dW2, db2 =back_prop(Z1, A1, Z2, A2, X, Y)
         W1,b1,W2, b2 = update_params(W1, b1, W2, b2, dW1, db1, dW2, db2, alpha)
         if i % 50 == 0:
-            print("Iteration", i)
-            print("Accuracy", get_accurcy(get_prediction(A2),Y))
+            print("Iteratiom",i)
+            print("Accurcy", get_accurcy(get_prediction(A2),Y))
             if(i % 10 == 0):
                 print("interation", i)
-                print("accuracy", get_accurcy(get_prediction(A2),Y))
-
+                print("accurcy", get_accurcy(get_prediction(A2),Y))
         return W1, b1, W2, b2
  
-
 W1, b1, W2, b2 = gradient_decent(X_train, Y_train, 500, 0.1)
 
 
