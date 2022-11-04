@@ -3,23 +3,23 @@
 #
 import random
 import matplotlib.pyplot as plt
-
+from datareader import MnistDataloader
 #
 # Set file paths based on added MNIST Datasets
 #
-input_path = '../input'
-training_images_filepath = join(input_path, 'train-images-idx3-ubyte/train-images-idx3-ubyte')
-training_labels_filepath = join(input_path, 'train-labels-idx1-ubyte/train-labels-idx1-ubyte')
-test_images_filepath = join(input_path, 't10k-images-idx3-ubyte/t10k-images-idx3-ubyte')
-test_labels_filepath = join(input_path, 't10k-labels-idx1-ubyte/t10k-labels-idx1-ubyte')
+training_images_filepath = './dataset/training/train-images-idx3-ubyte'
+training_labels_filepath = './dataset/training/train-labels-idx1-ubyte'
+test_images_filepath = './dataset/testing/t10k-images-idx3-ubyte'
+test_labels_filepath = './dataset/testing/t10k-labels-idx1-ubyte'
 
 #
 # Helper function to show a list of images with their relating titles
 #
+
 def show_images(images, title_texts):
-    cols = 5
-    rows = int(len(images)/cols) + 1
-    plt.figure(figsize=(30,20))
+    cols = 3
+    rows = int(len(images)/cols) + 2
+    plt.figure(figsize=(15,7))
     index = 1    
     for x in zip(images, title_texts):        
         image = x[0]        
@@ -27,8 +27,10 @@ def show_images(images, title_texts):
         plt.subplot(rows, cols, index)        
         plt.imshow(image, cmap=plt.cm.gray)
         if (title_text != ''):
-            plt.title(title_text, fontsize = 15);        
+            plt.title(title_text, fontsize = 12);        
         index += 1
+    plt.show()
+
 
 #
 # Load MINST dataset
