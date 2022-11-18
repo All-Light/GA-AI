@@ -137,12 +137,15 @@ def gradient_decent(X, Y, iterations, alpha):
         if i % 50 == 0:
             print("Iteration",i)
             print("Accuracy", get_accuracy(get_prediction(A2),Y))
+    print("New values. Iterations:", iterations, " alpha: ", alpha)
+    print("Accuracy: ", get_accuracy(get_prediction(A2),Y))
+
     return W1, b1, W2, b2
 
 
 
-
-W1, b1, W2, b2 = gradient_decent(X_train, Y_train, 200, 0.15)
+for i in range(1,15):
+    W1, b1, W2, b2 = gradient_decent(X_train, Y_train, 1000, 0.15*i)
 
 # saves modeldata to file (this doesnt really work)
 #np.savetxt("model_data.txt", W1)
@@ -151,9 +154,5 @@ W1, b1, W2, b2 = gradient_decent(X_train, Y_train, 200, 0.15)
 #np.savetxt("model_data.txt", b2)
 
 # some test predictions
-show_prediction(np.random.randint(500),X_test, Y_test, W1, b1, W2, b2)
-show_prediction(np.random.randint(500),X_test, Y_test, W1, b1, W2, b2)
-show_prediction(np.random.randint(500),X_test, Y_test, W1, b1, W2, b2)
-show_prediction(np.random.randint(500),X_test, Y_test, W1, b1, W2, b2)
-show_prediction(np.random.randint(500),X_test, Y_test, W1, b1, W2, b2)
-
+#for e in range(50):
+#    show_prediction(np.random.randint(500),X_test, Y_test, W1, b1, W2, b2)-
