@@ -1,22 +1,7 @@
-#from binascii import b2a_base64
-#from code import interact
-#from sqlite3 import dbapi2
-#from tkinter import Y
-#from xml.etree.ElementPath import prepare_predicate
 import numpy as np # import numpy, simplifies matrixes and linear algebra A LOT  //Problem för mig med denna rad.
 from datareader import MnistDataloader
 import math # imports math library, holds a lot of essential math 
 import matplotlib.pyplot as plt # for plotting graphs
-
-
-# This file will take data from our dataset and train an algorithm by K-nearest-neighbors algorithm
-# [ 1 2 3 4
-#   1 2 3 4
-#   1 2 3 4]
-
-
-# NOTE this file cant be run yet!
-
 
 training_images_filepath = './dataset/training/train-images-idx3-ubyte'
 training_labels_filepath = './dataset/training/train-labels-idx1-ubyte'
@@ -36,22 +21,6 @@ HEIGHT = X_train.shape[2]
 
 X_train = X_train.reshape(X_train.shape[0],WIDTH*HEIGHT).T / SCALE_FACTOR
 X_test = X_test.reshape(X_test.shape[0],WIDTH*HEIGHT).T  / SCALE_FACTOR
-
-'''
-data = np.array(train, dtype=object)
-m, n = data.shape
-np.random.shuffle(data)
-
-data_dev = data[0:1000].T
-Y_train = data_dev[0]
-X_train = data_dev[1:n]
-#Y_dev = data_dev[0]
-#X_dev = data_dev[1:n]
-
-#data_train = data[1000:m].T
-#Y_train = data_train[0]
-#X_train = data_train[1:n]
-'''
 
 def init_params(size):
     W1 = np.random.rand(10, size) - 0.5
@@ -126,33 +95,23 @@ def show_prediction(index, X, Y, W1, b1, W2, b2):
     plt.imshow(current_image, interpolation='nearest')
     plt.show()
 
-
-def gradient_decent(X, Y, iterations, alpha):
+def gradient_decent(X, Y, iterations, alpha, test_x, test_y):
     size, m = X.shape
     W1, b1, W2, b2 = init_params(size)
     for i in range(iterations):
         Z1, A1, Z2, A2 = forward_prop(W1, b1 , W2, b2, X)
         dW1, db1, dW2, db2 = back_prop(Z1, A1, Z2, A2, W1, W2, X, Y, m)
         W1, b1, W2, b2 = update_params(W1, b1, W2, b2, dW1, db1, dW2, db2, alpha)
-        if i % 50 == 0:
+        if i % 1000 == 0:
             print("Iteration",i)
             print("Accuracy", get_accuracy(get_prediction(A2),Y))
     print("New values. Iterations:", iterations, " alpha: ", alpha)
-    print("Accuracy: ", get_accuracy(get_prediction(A2),Y))
-
+    print("Accuracy: ", get_accuracy(make_predictions(test_x, W1 ,b1, W2, b2),test_y))
+    preds.append(("Steps: ", iterations, " alpha: ", alpha, " Accuracy: ", get_accuracy(make_predictions(test_x, W1 ,b1, W2, b2),test_y)))
     return W1, b1, W2, b2
 
 
-
-for i in range(1,15):
-    W1, b1, W2, b2 = gradient_decent(X_train, Y_train, 1000, 0.15*i)
-
-# saves modeldata to file (this doesnt really work)
-#np.savetxt("model_data.txt", W1)
-#np.savetxt("model_data.txt", b1)
-#np.savetxt("model_data.txt", W2)
-#np.savetxt("model_data.txt", b2)
-
-# some test predictions
-#for e in range(50):
-#    show_prediction(np.random.randint(500),X_test, Y_test, W1, b1, W2, b2)-
+preds =  []
+for i in range(1,6):
+    W1, b1, W2, b2 = gradient_decent(X_train, Y_train, 30000, 0.1*i, X_test, Y_test)
+    print(preds)
