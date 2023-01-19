@@ -37,7 +37,7 @@ HEIGHT = X_train.shape[2]
 X_train = X_train.reshape(X_train.shape[0],WIDTH*HEIGHT).T / SCALE_FACTOR
 X_test = X_test.reshape(X_test.shape[0],WIDTH*HEIGHT).T  / SCALE_FACTOR
 
-'''
+'''  
 data = np.array(train, dtype=object)
 m, n = data.shape
 np.random.shuffle(data)
@@ -139,10 +139,20 @@ def gradient_decent(X, Y, iterations, alpha):
             print("Accuracy", get_accuracy(get_prediction(A2),Y))
     return W1, b1, W2, b2
 
+W1, b1, W2, b2 = gradient_decent(X_train, Y_train, 50, 0.1)
 
-
-
-W1, b1, W2, b2 = gradient_decent(X_train, Y_train, 200, 0.15)
+with open("OneLayerValuesW1.txt", "w") as out_file:
+#    String_out = "W1"+"\n"
+    out_file.write(str(W1))
+with open("OneLayerValuesb1.txt", "w") as out_file:
+#    String_out += "b1"+"\n"
+    out_file.write(str(b1))
+with open("OneLayerValuesW2.txt", "w") as out_file:
+#    String_out += "W2"+"\n"
+    out_file.write(str(W2))
+with open("OneLayerValuesb2.txt", "w") as out_file:
+#    String_out += "b2"+"\n"
+    out_file.write(str(b2))
 
 # saves modeldata to file (this doesnt really work)
 #np.savetxt("model_data.txt", W1)
