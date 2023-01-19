@@ -7,7 +7,7 @@ import numpy as np # import numpy, simplifies matrixes and linear algebra A LOT 
 from datareader import MnistDataloader
 import math # imports math library, holds a lot of essential math 
 import matplotlib.pyplot as plt # for plotting graphs
-
+import csv
 
 # This file will take data from our dataset and train an algorithm by K-nearest-neighbors algorithm
 # [ 1 2 3 4
@@ -37,7 +37,7 @@ HEIGHT = X_train.shape[2]
 X_train = X_train.reshape(X_train.shape[0],WIDTH*HEIGHT).T / SCALE_FACTOR
 X_test = X_test.reshape(X_test.shape[0],WIDTH*HEIGHT).T  / SCALE_FACTOR
 
-'''  
+'''
 data = np.array(train, dtype=object)
 m, n = data.shape
 np.random.shuffle(data)
@@ -52,12 +52,27 @@ X_train = data_dev[1:n]
 #Y_train = data_train[0]
 #X_train = data_train[1:n]
 '''
-
+# help https://blog.finxter.com/how-to-convert-a-csv-to-numpy-array-in-python/
 def init_params(size):
-    W1 = np.random.rand(10, size) - 0.5
-    b1 = np.random.rand(10, 1) - 0.5
-    W2 = np.random.rand(10, 10) - 0.5
-    b2 = np.random.rand(10, 1) - 0.5
+    #W1 = np.random.rand(10, size) - 0.5
+    #b1 = np.random.rand(10, 1) - 0.5
+    
+    #with open("b1.csv", "r") as in_file:
+        #reader = csv.reader(in_file.read())
+        #b1 = list(reader)
+
+    # load data
+    W1 = np.loadtxt('npW1.csv', delimiter = ',')
+    b1 = np.random.rand(10, 1) - 0.5 # so b1 exsist
+    b1x = np.array(np.loadtxt('npb1.csv'))
+    for i  in  range (10):
+        b1[i] = b1x[i]
+    W2 = np.loadtxt('npW2.csv', delimiter= ',') 
+    b2 = np.random.rand(10, 1) - 0.5 # so b2 exsist
+    b2x = np.array(np.loadtxt('npb2.csv'))
+    for i  in  range (10):
+        b2[i] = b2x[i]
+
     return W1, b1, W2, b2
 
 def ReLU(Z):
@@ -139,31 +154,18 @@ def gradient_decent(X, Y, iterations, alpha):
             print("Accuracy", get_accuracy(get_prediction(A2),Y))
     return W1, b1, W2, b2
 
-W1, b1, W2, b2 = gradient_decent(X_train, Y_train, 50, 0.1)
+W1, b1, W2, b2 = gradient_decent(X_train, Y_train, 50, 0.15)
 
-with open("OneLayerValuesW1.txt", "w") as out_file:
-#    String_out = "W1"+"\n"
-    out_file.write(str(W1))
-with open("OneLayerValuesb1.txt", "w") as out_file:
-#    String_out += "b1"+"\n"
-    out_file.write(str(b1))
-with open("OneLayerValuesW2.txt", "w") as out_file:
-#    String_out += "W2"+"\n"
-    out_file.write(str(W2))
-with open("OneLayerValuesb2.txt", "w") as out_file:
-#    String_out += "b2"+"\n"
-    out_file.write(str(b2))
+# save data
+np.savetxt('npW1.csv',W1 , delimiter=',')
+np.savetxt('npb1.csv',b1 , delimiter=',')
+np.savetxt('npW2.csv',W2 , delimiter=',')
+np.savetxt('npb2.csv',b2 , delimiter=',')
 
-# saves modeldata to file (this doesnt really work)
-#np.savetxt("model_data.txt", W1)
-#np.savetxt("model_data.txt", b1)
-#np.savetxt("model_data.txt", W2)
-#np.savetxt("model_data.txt", b2)
 
-# some test predictions
+# some test prediction 
 show_prediction(np.random.randint(500),X_test, Y_test, W1, b1, W2, b2)
 show_prediction(np.random.randint(500),X_test, Y_test, W1, b1, W2, b2)
 show_prediction(np.random.randint(500),X_test, Y_test, W1, b1, W2, b2)
 show_prediction(np.random.randint(500),X_test, Y_test, W1, b1, W2, b2)
 show_prediction(np.random.randint(500),X_test, Y_test, W1, b1, W2, b2)
-

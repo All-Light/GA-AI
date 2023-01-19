@@ -128,3 +128,4 @@ dmypy.json
 .pyre/
 
 model_data.txt
+train.py
