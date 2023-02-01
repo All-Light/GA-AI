@@ -173,12 +173,87 @@ def gradient_decent(X, Y, iterations, alpha, test_x, test_y):
 
 # training with different iterations and alpha
 preds =  []
-for i in range(1,6):
-    W1, b1, W2, b2 = gradient_decent(X_train, Y_train, 30, 0.1*i, X_test, Y_test)
+iterations = 2000
+alpha_scale = 0.01
+for i in range(2,6):
+    W1, b1, W2, b2 = gradient_decent(X_train, Y_train, iterations, alpha_scale*i, X_test, Y_test)
     print(preds)
+    preds = np.array(preds)
+    np.savetxt('./output/npW1_'+str(iterations)+'_'+str(alpha_scale*i)+'.csv',W1 , delimiter=',')
+    np.savetxt('./output/npb1_'+str(iterations)+'_'+str(alpha_scale*i)+'.csv',b1 , delimiter=',')
+    np.savetxt('./output/npW2_'+str(iterations)+'_'+str(alpha_scale*i)+'.csv',W2 , delimiter=',')
+    np.savetxt('./output/npb2_'+str(iterations)+'_'+str(alpha_scale*i)+'.csv',b2 , delimiter=',')
+    np.savetxt('./output/preds_'+str(iterations)+'_'+str(alpha_scale*i)+'.csv',preds, '%s')
+    preds =  []
+
+iterations = 2000
+alpha_scale = 0.1
+for i in range(1,11):
+    W1, b1, W2, b2 = gradient_decent(X_train, Y_train, iterations, alpha_scale*i, X_test, Y_test)
+    print(preds)
+    preds = np.array(preds)
+    np.savetxt('./output/npW1_'+str(iterations)+'_'+str(alpha_scale*i)+'.csv',W1 , delimiter=',')
+    np.savetxt('./output/npb1_'+str(iterations)+'_'+str(alpha_scale*i)+'.csv',b1 , delimiter=',')
+    np.savetxt('./output/npW2_'+str(iterations)+'_'+str(alpha_scale*i)+'.csv',W2 , delimiter=',')
+    np.savetxt('./output/npb2_'+str(iterations)+'_'+str(alpha_scale*i)+'.csv',b2 , delimiter=',')
+    np.savetxt('./output/preds_'+str(iterations)+'_'+str(alpha_scale*i)+'.csv',preds, '%s')
+    preds =  []
+
+iterations = 5000
+alpha_scale = 0.01
+for i in range(1,6):
+    W1, b1, W2, b2 = gradient_decent(X_train, Y_train, iterations, alpha_scale*i, X_test, Y_test)
+    print(preds)
+    preds = np.array(preds)
+    np.savetxt('./output/npW1_'+str(iterations)+'_'+str(alpha_scale*i)+'.csv',W1 , delimiter=',')
+    np.savetxt('./output/npb1_'+str(iterations)+'_'+str(alpha_scale*i)+'.csv',b1 , delimiter=',')
+    np.savetxt('./output/npW2_'+str(iterations)+'_'+str(alpha_scale*i)+'.csv',W2 , delimiter=',')
+    np.savetxt('./output/npb2_'+str(iterations)+'_'+str(alpha_scale*i)+'.csv',b2 , delimiter=',')
+    np.savetxt('./output/preds_'+str(iterations)+'_'+str(alpha_scale*i)+'.csv',preds, '%s')
+    preds = []
+
+iterations = 5000
+alpha_scale = 0.1
+for i in range(1,11):
+    W1, b1, W2, b2 = gradient_decent(X_train, Y_train, iterations, alpha_scale*i, X_test, Y_test)
+    print(preds)
+    preds = np.array(preds)
+    np.savetxt('./output/npW1_'+str(iterations)+'_'+str(alpha_scale*i)+'.csv',W1 , delimiter=',')
+    np.savetxt('./output/npb1_'+str(iterations)+'_'+str(alpha_scale*i)+'.csv',b1 , delimiter=',')
+    np.savetxt('./output/npW2_'+str(iterations)+'_'+str(alpha_scale*i)+'.csv',W2 , delimiter=',')
+    np.savetxt('./output/npb2_'+str(iterations)+'_'+str(alpha_scale*i)+'.csv',b2 , delimiter=',')
+    np.savetxt('./output/preds_'+str(iterations)+'_'+str(alpha_scale*i)+'.csv',preds, '%s')
+    preds = []
+
+
+iterations = 10000
+alpha_scale = 0.01
+for i in range(1,6):
+    W1, b1, W2, b2 = gradient_decent(X_train, Y_train, iterations, alpha_scale*i, X_test, Y_test)
+    print(preds)
+    preds = np.array(preds)
+    np.savetxt('./output/npW1_'+str(iterations)+'_'+str(alpha_scale*i)+'.csv',W1 , delimiter=',')
+    np.savetxt('./output/npb1_'+str(iterations)+'_'+str(alpha_scale*i)+'.csv',b1 , delimiter=',')
+    np.savetxt('./output/npW2_'+str(iterations)+'_'+str(alpha_scale*i)+'.csv',W2 , delimiter=',')
+    np.savetxt('./output/npb2_'+str(iterations)+'_'+str(alpha_scale*i)+'.csv',b2 , delimiter=',')
+    np.savetxt('./output/preds_'+str(iterations)+'_'+str(alpha_scale*i)+'.csv',preds, '%s')
+    preds = []
+
+iterations = 10000
+alpha_scale = 0.1
+for i in range(1,11):
+    W1, b1, W2, b2 = gradient_decent(X_train, Y_train, iterations, alpha_scale*i, X_test, Y_test)
+    print(preds)
+    preds = np.array(preds)
+    np.savetxt('./output/npW1_'+str(iterations)+'_'+str(alpha_scale*i)+'.csv',W1 , delimiter=',')
+    np.savetxt('./output/npb1_'+str(iterations)+'_'+str(alpha_scale*i)+'.csv',b1 , delimiter=',')
+    np.savetxt('./output/npW2_'+str(iterations)+'_'+str(alpha_scale*i)+'.csv',W2 , delimiter=',')
+    np.savetxt('./output/npb2_'+str(iterations)+'_'+str(alpha_scale*i)+'.csv',b2 , delimiter=',')
+    np.savetxt('./output/preds_'+str(iterations)+'_'+str(alpha_scale*i)+'.csv',preds, '%s')
+    preds = []
 
 # save data
-np.savetxt('npW1.csv',W1 , delimiter=',')
-np.savetxt('npb1.csv',b1 , delimiter=',')
-np.savetxt('npW2.csv',W2 , delimiter=',')
-np.savetxt('npb2.csv',b2 , delimiter=',')
+#np.savetxt('./output/npW1.csv',W1 , delimiter=',')
+#np.savetxt('./output/npb1.csv',b1 , delimiter=',')
+#np.savetxt('./output/npW2.csv',W2 , delimiter=',')
+#np.savetxt('./output/npb2.csv',b2 , delimiter=',')
