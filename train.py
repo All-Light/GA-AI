@@ -107,12 +107,12 @@ def back_prop(Z1, A1, Z2, A2, W1, W2, X, Y, m):
 
     return dW1, db1, dW2, db2
 
-def update_params(W1, b1, W2, b2, dW1, db1, dW2, db2, alpha):
+def update_params(W1, b1, W2, b2, dW1, db1, dW2, db2, learn_rate):
     # changes weights and biases with a step 
-    W1 -= alpha * dW1
-    b1 -= alpha * np.reshape(db1, (10,1))
-    W2 -= alpha * dW2
-    b2 -= alpha * np.reshape(db2, (10,1))
+    W1 -= learn_rate * dW1
+    b1 -= learn_rate * np.reshape(db1, (10,1))
+    W2 -= learn_rate * dW2
+    b2 -= learn_rate * np.reshape(db2, (10,1))
     return W1, b1, W2, b2
 
 def get_prediction(A2):
@@ -144,7 +144,7 @@ def show_prediction(index, X, Y, W1, b1, W2, b2):
 
 
 # Main function. 
-def gradient_decent(X, Y, iterations, alpha, test_x, test_y):
+def gradient_decent(X, Y, iterations, learn_rate, test_x, test_y):
     size, m = X.shape
     # initialize parameters (randomized)
     W1, b1, W2, b2 = init_params(size)
@@ -158,171 +158,171 @@ def gradient_decent(X, Y, iterations, alpha, test_x, test_y):
         dW1, db1, dW2, db2 = back_prop(Z1, A1, Z2, A2, W1, W2, X, Y, m)
         
         # update weights and biases from prediction
-        W1, b1, W2, b2 = update_params(W1, b1, W2, b2, dW1, db1, dW2, db2, alpha)
+        W1, b1, W2, b2 = update_params(W1, b1, W2, b2, dW1, db1, dW2, db2, learn_rate)
         if i % 1000 == 0:
             print("Iteration",i)
             print("Accuracy", get_accuracy(get_prediction(A2),Y))
-    print("New values. Iterations:", iterations, " alpha: ", alpha)
+    print("New values. Iterations:", iterations, " learn_rate: ", learn_rate)
     
     # This displays the ACTUAL accuracy of the model, previous accuracies are merely an approximation
     # this is because they are testing the model on the training data, whereas this line uses the testing data
     print("Accuracy: ", get_accuracy(make_predictions(test_x, W1 ,b1, W2, b2),test_y))
-    preds.append(("Steps: ", iterations, " alpha: ", alpha, " Accuracy: ", get_accuracy(make_predictions(test_x, W1 ,b1, W2, b2),test_y)))
+    preds.append(("Steps: ", iterations, " learn_rate: ", learn_rate, " Accuracy: ", get_accuracy(make_predictions(test_x, W1 ,b1, W2, b2),test_y)))
     return W1, b1, W2, b2
 
 
-# training with different iterations and alpha
+# training with different iterations and learn_rate
 preds =  []
 iterations = 1000
-alpha_scale = 0.01
+learn_rate = 0.01
 for i in range(1,6):
-    W1, b1, W2, b2 = gradient_decent(X_train, Y_train, iterations, alpha_scale*i, X_test, Y_test)
+    W1, b1, W2, b2 = gradient_decent(X_train, Y_train, iterations, learn_rate*i, X_test, Y_test)
     print(preds)
     preds = np.array(preds)
-    np.savetxt('./output/npW1_'+str(iterations)+'_'+str(alpha_scale*i)+'.csv',W1 , delimiter=',')
-    np.savetxt('./output/npb1_'+str(iterations)+'_'+str(alpha_scale*i)+'.csv',b1 , delimiter=',')
-    np.savetxt('./output/npW2_'+str(iterations)+'_'+str(alpha_scale*i)+'.csv',W2 , delimiter=',')
-    np.savetxt('./output/npb2_'+str(iterations)+'_'+str(alpha_scale*i)+'.csv',b2 , delimiter=',')
-    np.savetxt('./output/preds_'+str(iterations)+'_'+str(alpha_scale*i)+'.csv',preds, '%s')
+    np.savetxt('./output/npW1_'+str(iterations)+'_'+str(learn_rate*i)+'.csv',W1 , delimiter=',')
+    np.savetxt('./output/npb1_'+str(iterations)+'_'+str(learn_rate*i)+'.csv',b1 , delimiter=',')
+    np.savetxt('./output/npW2_'+str(iterations)+'_'+str(learn_rate*i)+'.csv',W2 , delimiter=',')
+    np.savetxt('./output/npb2_'+str(iterations)+'_'+str(learn_rate*i)+'.csv',b2 , delimiter=',')
+    np.savetxt('./output/preds_'+str(iterations)+'_'+str(learn_rate*i)+'.csv',preds, '%s')
     preds =  []
 
 
 preds =  []
 iterations = 1000
-alpha_scale = 0.1
+learn_rate = 0.1
 for i in range(1,11):
-    W1, b1, W2, b2 = gradient_decent(X_train, Y_train, iterations, alpha_scale*i, X_test, Y_test)
+    W1, b1, W2, b2 = gradient_decent(X_train, Y_train, iterations, learn_rate*i, X_test, Y_test)
     print(preds)
     preds = np.array(preds)
-    np.savetxt('./output/npW1_'+str(iterations)+'_'+str(alpha_scale*i)+'.csv',W1 , delimiter=',')
-    np.savetxt('./output/npb1_'+str(iterations)+'_'+str(alpha_scale*i)+'.csv',b1 , delimiter=',')
-    np.savetxt('./output/npW2_'+str(iterations)+'_'+str(alpha_scale*i)+'.csv',W2 , delimiter=',')
-    np.savetxt('./output/npb2_'+str(iterations)+'_'+str(alpha_scale*i)+'.csv',b2 , delimiter=',')
-    np.savetxt('./output/preds_'+str(iterations)+'_'+str(alpha_scale*i)+'.csv',preds, '%s')
+    np.savetxt('./output/npW1_'+str(iterations)+'_'+str(learn_rate*i)+'.csv',W1 , delimiter=',')
+    np.savetxt('./output/npb1_'+str(iterations)+'_'+str(learn_rate*i)+'.csv',b1 , delimiter=',')
+    np.savetxt('./output/npW2_'+str(iterations)+'_'+str(learn_rate*i)+'.csv',W2 , delimiter=',')
+    np.savetxt('./output/npb2_'+str(iterations)+'_'+str(learn_rate*i)+'.csv',b2 , delimiter=',')
+    np.savetxt('./output/preds_'+str(iterations)+'_'+str(learn_rate*i)+'.csv',preds, '%s')
     preds =  []
 
 '''
 preds =  []
 iterations = 30000
-alpha_scale = 0.01
+learn_rate = 0.01
 for i in range(1,2):
-    W1, b1, W2, b2 = gradient_decent(X_train, Y_train, iterations, alpha_scale*i, X_test, Y_test)
+    W1, b1, W2, b2 = gradient_decent(X_train, Y_train, iterations, learn_rate*i, X_test, Y_test)
     print(preds)
     preds = np.array(preds)
-    np.savetxt('./output/npW1_'+str(iterations)+'_'+str(alpha_scale*i)+'.csv',W1 , delimiter=',')
-    np.savetxt('./output/npb1_'+str(iterations)+'_'+str(alpha_scale*i)+'.csv',b1 , delimiter=',')
-    np.savetxt('./output/npW2_'+str(iterations)+'_'+str(alpha_scale*i)+'.csv',W2 , delimiter=',')
-    np.savetxt('./output/npb2_'+str(iterations)+'_'+str(alpha_scale*i)+'.csv',b2 , delimiter=',')
-    np.savetxt('./output/preds_'+str(iterations)+'_'+str(alpha_scale*i)+'.csv',preds, '%s')
+    np.savetxt('./output/npW1_'+str(iterations)+'_'+str(learn_rate*i)+'.csv',W1 , delimiter=',')
+    np.savetxt('./output/npb1_'+str(iterations)+'_'+str(learn_rate*i)+'.csv',b1 , delimiter=',')
+    np.savetxt('./output/npW2_'+str(iterations)+'_'+str(learn_rate*i)+'.csv',W2 , delimiter=',')
+    np.savetxt('./output/npb2_'+str(iterations)+'_'+str(learn_rate*i)+'.csv',b2 , delimiter=',')
+    np.savetxt('./output/preds_'+str(iterations)+'_'+str(learn_rate*i)+'.csv',preds, '%s')
     preds =  []
 
 
 preds =  []
 iterations = 30000
-alpha_scale = 0.01
+learn_rate = 0.01
 for i in range(2,6):
-    W1, b1, W2, b2 = gradient_decent(X_train, Y_train, iterations, alpha_scale*i, X_test, Y_test)
+    W1, b1, W2, b2 = gradient_decent(X_train, Y_train, iterations, learn_rate*i, X_test, Y_test)
     print(preds)
     preds = np.array(preds)
-    np.savetxt('./output/npW1_'+str(iterations)+'_'+str(alpha_scale*i)+'.csv',W1 , delimiter=',')
-    np.savetxt('./output/npb1_'+str(iterations)+'_'+str(alpha_scale*i)+'.csv',b1 , delimiter=',')
-    np.savetxt('./output/npW2_'+str(iterations)+'_'+str(alpha_scale*i)+'.csv',W2 , delimiter=',')
-    np.savetxt('./output/npb2_'+str(iterations)+'_'+str(alpha_scale*i)+'.csv',b2 , delimiter=',')
-    np.savetxt('./output/preds_'+str(iterations)+'_'+str(alpha_scale*i)+'.csv',preds, '%s')
+    np.savetxt('./output/npW1_'+str(iterations)+'_'+str(learn_rate*i)+'.csv',W1 , delimiter=',')
+    np.savetxt('./output/npb1_'+str(iterations)+'_'+str(learn_rate*i)+'.csv',b1 , delimiter=',')
+    np.savetxt('./output/npW2_'+str(iterations)+'_'+str(learn_rate*i)+'.csv',W2 , delimiter=',')
+    np.savetxt('./output/npb2_'+str(iterations)+'_'+str(learn_rate*i)+'.csv',b2 , delimiter=',')
+    np.savetxt('./output/preds_'+str(iterations)+'_'+str(learn_rate*i)+'.csv',preds, '%s')
     preds =  []
 
 iterations = 30000
-alpha_scale = 0.1
+learn_rate = 0.1
 for i in range(1,11):
-    W1, b1, W2, b2 = gradient_decent(X_train, Y_train, iterations, alpha_scale*i, X_test, Y_test)
+    W1, b1, W2, b2 = gradient_decent(X_train, Y_train, iterations, learn_rate*i, X_test, Y_test)
     print(preds)
     preds = np.array(preds)
-    np.savetxt('./output/npW1_'+str(iterations)+'_'+str(alpha_scale*i)+'.csv',W1 , delimiter=',')
-    np.savetxt('./output/npb1_'+str(iterations)+'_'+str(alpha_scale*i)+'.csv',b1 , delimiter=',')
-    np.savetxt('./output/npW2_'+str(iterations)+'_'+str(alpha_scale*i)+'.csv',W2 , delimiter=',')
-    np.savetxt('./output/npb2_'+str(iterations)+'_'+str(alpha_scale*i)+'.csv',b2 , delimiter=',')
-    np.savetxt('./output/preds_'+str(iterations)+'_'+str(alpha_scale*i)+'.csv',preds, '%s')
+    np.savetxt('./output/npW1_'+str(iterations)+'_'+str(learn_rate*i)+'.csv',W1 , delimiter=',')
+    np.savetxt('./output/npb1_'+str(iterations)+'_'+str(learn_rate*i)+'.csv',b1 , delimiter=',')
+    np.savetxt('./output/npW2_'+str(iterations)+'_'+str(learn_rate*i)+'.csv',W2 , delimiter=',')
+    np.savetxt('./output/npb2_'+str(iterations)+'_'+str(learn_rate*i)+'.csv',b2 , delimiter=',')
+    np.savetxt('./output/preds_'+str(iterations)+'_'+str(learn_rate*i)+'.csv',preds, '%s')
     preds =  []
 '''
 '''
 preds =  []
 iterations = 2000
-alpha_scale = 0.01
+learn_rate = 0.01
 for i in range(2,6):
-    W1, b1, W2, b2 = gradient_decent(X_train, Y_train, iterations, alpha_scale*i, X_test, Y_test)
+    W1, b1, W2, b2 = gradient_decent(X_train, Y_train, iterations, learn_rate*i, X_test, Y_test)
     print(preds)
     preds = np.array(preds)
-    np.savetxt('./output/npW1_'+str(iterations)+'_'+str(alpha_scale*i)+'.csv',W1 , delimiter=',')
-    np.savetxt('./output/npb1_'+str(iterations)+'_'+str(alpha_scale*i)+'.csv',b1 , delimiter=',')
-    np.savetxt('./output/npW2_'+str(iterations)+'_'+str(alpha_scale*i)+'.csv',W2 , delimiter=',')
-    np.savetxt('./output/npb2_'+str(iterations)+'_'+str(alpha_scale*i)+'.csv',b2 , delimiter=',')
-    np.savetxt('./output/preds_'+str(iterations)+'_'+str(alpha_scale*i)+'.csv',preds, '%s')
+    np.savetxt('./output/npW1_'+str(iterations)+'_'+str(learn_rate*i)+'.csv',W1 , delimiter=',')
+    np.savetxt('./output/npb1_'+str(iterations)+'_'+str(learn_rate*i)+'.csv',b1 , delimiter=',')
+    np.savetxt('./output/npW2_'+str(iterations)+'_'+str(learn_rate*i)+'.csv',W2 , delimiter=',')
+    np.savetxt('./output/npb2_'+str(iterations)+'_'+str(learn_rate*i)+'.csv',b2 , delimiter=',')
+    np.savetxt('./output/preds_'+str(iterations)+'_'+str(learn_rate*i)+'.csv',preds, '%s')
     preds =  []
 
 iterations = 2000
-alpha_scale = 0.1
+learn_rate = 0.1
 for i in range(1,11):
-    W1, b1, W2, b2 = gradient_decent(X_train, Y_train, iterations, alpha_scale*i, X_test, Y_test)
+    W1, b1, W2, b2 = gradient_decent(X_train, Y_train, iterations, learn_rate*i, X_test, Y_test)
     print(preds)
     preds = np.array(preds)
-    np.savetxt('./output/npW1_'+str(iterations)+'_'+str(alpha_scale*i)+'.csv',W1 , delimiter=',')
-    np.savetxt('./output/npb1_'+str(iterations)+'_'+str(alpha_scale*i)+'.csv',b1 , delimiter=',')
-    np.savetxt('./output/npW2_'+str(iterations)+'_'+str(alpha_scale*i)+'.csv',W2 , delimiter=',')
-    np.savetxt('./output/npb2_'+str(iterations)+'_'+str(alpha_scale*i)+'.csv',b2 , delimiter=',')
-    np.savetxt('./output/preds_'+str(iterations)+'_'+str(alpha_scale*i)+'.csv',preds, '%s')
+    np.savetxt('./output/npW1_'+str(iterations)+'_'+str(learn_rate*i)+'.csv',W1 , delimiter=',')
+    np.savetxt('./output/npb1_'+str(iterations)+'_'+str(learn_rate*i)+'.csv',b1 , delimiter=',')
+    np.savetxt('./output/npW2_'+str(iterations)+'_'+str(learn_rate*i)+'.csv',W2 , delimiter=',')
+    np.savetxt('./output/npb2_'+str(iterations)+'_'+str(learn_rate*i)+'.csv',b2 , delimiter=',')
+    np.savetxt('./output/preds_'+str(iterations)+'_'+str(learn_rate*i)+'.csv',preds, '%s')
     preds =  []
 
 iterations = 5000
-alpha_scale = 0.01
+learn_rate = 0.01
 for i in range(1,6):
-    W1, b1, W2, b2 = gradient_decent(X_train, Y_train, iterations, alpha_scale*i, X_test, Y_test)
+    W1, b1, W2, b2 = gradient_decent(X_train, Y_train, iterations, learn_rate*i, X_test, Y_test)
     print(preds)
     preds = np.array(preds)
-    np.savetxt('./output/npW1_'+str(iterations)+'_'+str(alpha_scale*i)+'.csv',W1 , delimiter=',')
-    np.savetxt('./output/npb1_'+str(iterations)+'_'+str(alpha_scale*i)+'.csv',b1 , delimiter=',')
-    np.savetxt('./output/npW2_'+str(iterations)+'_'+str(alpha_scale*i)+'.csv',W2 , delimiter=',')
-    np.savetxt('./output/npb2_'+str(iterations)+'_'+str(alpha_scale*i)+'.csv',b2 , delimiter=',')
-    np.savetxt('./output/preds_'+str(iterations)+'_'+str(alpha_scale*i)+'.csv',preds, '%s')
+    np.savetxt('./output/npW1_'+str(iterations)+'_'+str(learn_rate*i)+'.csv',W1 , delimiter=',')
+    np.savetxt('./output/npb1_'+str(iterations)+'_'+str(learn_rate*i)+'.csv',b1 , delimiter=',')
+    np.savetxt('./output/npW2_'+str(iterations)+'_'+str(learn_rate*i)+'.csv',W2 , delimiter=',')
+    np.savetxt('./output/npb2_'+str(iterations)+'_'+str(learn_rate*i)+'.csv',b2 , delimiter=',')
+    np.savetxt('./output/preds_'+str(iterations)+'_'+str(learn_rate*i)+'.csv',preds, '%s')
     preds = []
 
 iterations = 5000
-alpha_scale = 0.1
+learn_rate = 0.1
 for i in range(1,11):
-    W1, b1, W2, b2 = gradient_decent(X_train, Y_train, iterations, alpha_scale*i, X_test, Y_test)
+    W1, b1, W2, b2 = gradient_decent(X_train, Y_train, iterations, learn_rate*i, X_test, Y_test)
     print(preds)
     preds = np.array(preds)
-    np.savetxt('./output/npW1_'+str(iterations)+'_'+str(alpha_scale*i)+'.csv',W1 , delimiter=',')
-    np.savetxt('./output/npb1_'+str(iterations)+'_'+str(alpha_scale*i)+'.csv',b1 , delimiter=',')
-    np.savetxt('./output/npW2_'+str(iterations)+'_'+str(alpha_scale*i)+'.csv',W2 , delimiter=',')
-    np.savetxt('./output/npb2_'+str(iterations)+'_'+str(alpha_scale*i)+'.csv',b2 , delimiter=',')
-    np.savetxt('./output/preds_'+str(iterations)+'_'+str(alpha_scale*i)+'.csv',preds, '%s')
+    np.savetxt('./output/npW1_'+str(iterations)+'_'+str(learn_rate*i)+'.csv',W1 , delimiter=',')
+    np.savetxt('./output/npb1_'+str(iterations)+'_'+str(learn_rate*i)+'.csv',b1 , delimiter=',')
+    np.savetxt('./output/npW2_'+str(iterations)+'_'+str(learn_rate*i)+'.csv',W2 , delimiter=',')
+    np.savetxt('./output/npb2_'+str(iterations)+'_'+str(learn_rate*i)+'.csv',b2 , delimiter=',')
+    np.savetxt('./output/preds_'+str(iterations)+'_'+str(learn_rate*i)+'.csv',preds, '%s')
     preds = []
 
 
 iterations = 10000
-alpha_scale = 0.01
+learn_rate = 0.01
 for i in range(1,6):
-    W1, b1, W2, b2 = gradient_decent(X_train, Y_train, iterations, alpha_scale*i, X_test, Y_test)
+    W1, b1, W2, b2 = gradient_decent(X_train, Y_train, iterations, learn_rate*i, X_test, Y_test)
     print(preds)
     preds = np.array(preds)
-    np.savetxt('./output/npW1_'+str(iterations)+'_'+str(alpha_scale*i)+'.csv',W1 , delimiter=',')
-    np.savetxt('./output/npb1_'+str(iterations)+'_'+str(alpha_scale*i)+'.csv',b1 , delimiter=',')
-    np.savetxt('./output/npW2_'+str(iterations)+'_'+str(alpha_scale*i)+'.csv',W2 , delimiter=',')
-    np.savetxt('./output/npb2_'+str(iterations)+'_'+str(alpha_scale*i)+'.csv',b2 , delimiter=',')
-    np.savetxt('./output/preds_'+str(iterations)+'_'+str(alpha_scale*i)+'.csv',preds, '%s')
+    np.savetxt('./output/npW1_'+str(iterations)+'_'+str(learn_rate*i)+'.csv',W1 , delimiter=',')
+    np.savetxt('./output/npb1_'+str(iterations)+'_'+str(learn_rate*i)+'.csv',b1 , delimiter=',')
+    np.savetxt('./output/npW2_'+str(iterations)+'_'+str(learn_rate*i)+'.csv',W2 , delimiter=',')
+    np.savetxt('./output/npb2_'+str(iterations)+'_'+str(learn_rate*i)+'.csv',b2 , delimiter=',')
+    np.savetxt('./output/preds_'+str(iterations)+'_'+str(learn_rate*i)+'.csv',preds, '%s')
     preds = []
 
 iterations = 10000
-alpha_scale = 0.1
+learn_rate = 0.1
 for i in range(1,11):
-    W1, b1, W2, b2 = gradient_decent(X_train, Y_train, iterations, alpha_scale*i, X_test, Y_test)
+    W1, b1, W2, b2 = gradient_decent(X_train, Y_train, iterations, learn_rate*i, X_test, Y_test)
     print(preds)
     preds = np.array(preds)
-    np.savetxt('./output/npW1_'+str(iterations)+'_'+str(alpha_scale*i)+'.csv',W1 , delimiter=',')
-    np.savetxt('./output/npb1_'+str(iterations)+'_'+str(alpha_scale*i)+'.csv',b1 , delimiter=',')
-    np.savetxt('./output/npW2_'+str(iterations)+'_'+str(alpha_scale*i)+'.csv',W2 , delimiter=',')
-    np.savetxt('./output/npb2_'+str(iterations)+'_'+str(alpha_scale*i)+'.csv',b2 , delimiter=',')
-    np.savetxt('./output/preds_'+str(iterations)+'_'+str(alpha_scale*i)+'.csv',preds, '%s')
+    np.savetxt('./output/npW1_'+str(iterations)+'_'+str(learn_rate*i)+'.csv',W1 , delimiter=',')
+    np.savetxt('./output/npb1_'+str(iterations)+'_'+str(learn_rate*i)+'.csv',b1 , delimiter=',')
+    np.savetxt('./output/npW2_'+str(iterations)+'_'+str(learn_rate*i)+'.csv',W2 , delimiter=',')
+    np.savetxt('./output/npb2_'+str(iterations)+'_'+str(learn_rate*i)+'.csv',b2 , delimiter=',')
+    np.savetxt('./output/preds_'+str(iterations)+'_'+str(learn_rate*i)+'.csv',preds, '%s')
     preds = []
 
 # save data
