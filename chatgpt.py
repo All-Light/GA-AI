@@ -3,6 +3,12 @@ import numpy as np
 # initialize pygame
 pygame.init()
 
+# This file starts a window that you can draw in. 
+# When you release the mouse button a prediction will be outputted to the terminal
+# To clear the screen press "Q"
+# It is not known if it is entierly accurate of the model.
+# Either the model is not perfect or this file is somehow converting something wrong.
+
 # set the window size
 window_size = (540, 540)
 
@@ -28,24 +34,7 @@ grid = [[0 for j in range(grid_size)] for i in range(grid_size)]
 # track whether the mouse button is being pressed
 mouse_down = False
 
-# run the main loop
-running = True
-while running:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
-        elif event.type == pygame.MOUSEBUTTONDOWN:
-            mouse_down = True
-        elif event.type == pygame.MOUSEBUTTONUP:
-            mouse_down = False
-            x, y = pygame.mouse.get_pos()
-            grid[x // cell_size][y // cell_size] = 1
 
-    if mouse_down:
-        x, y = pygame.mouse.get_pos()
-        grid[x // cell_size][y // cell_size] = 1
-        pygame.draw.rect(screen, (255, 0, 0), (x // cell_size * cell_size, y // cell_size * cell_size, cell_size, cell_size))
-        pygame.display.update()
 def ReLU(Z):
     return np.maximum(0, Z)
 
@@ -64,31 +53,70 @@ def forward_prop(W1, b1, W2, b2, X):
     return Z1, A1, Z2, A2
 
 def output(grid):
-    W1 = np.loadtxt('npW1.csv', delimiter = ',')
+    W1 = np.loadtxt('./output/npW1_30000_0.04.csv', delimiter = ',')
     b1 = np.random.rand(10, 1) - 0.5 # so b1 exsist
-    b1x = np.array(np.loadtxt('npb1.csv'))
-    for i  in  range (10):
+    b1x = np.array(np.loadtxt('./output/npb1_30000_0.04.csv'))
+    for i in range(10):
         b1[i] = b1x[i]
-    W2 = np.loadtxt('npW2.csv', delimiter= ',') 
+    W2 = np.loadtxt('./output/npW2_30000_0.04.csv', delimiter= ',') 
     b2 = np.random.rand(10, 1) - 0.5 # so b2 exsist
-    b2x = np.array(np.loadtxt('npb2.csv'))
-    for i  in  range (10):
+    b2x = np.array(np.loadtxt('./output/npb2_30000_0.04.csv'))
+    for i in range(10):
         b2[i] = b2x[i]
 
     new_grid = [0 for x in range(0,784)]
-
     for xindex,x in enumerate(grid):
         for yindex,y in enumerate(grid[xindex]):
-            
-            new_grid[xindex*27+yindex] = y
-
+            new_grid[yindex*27+xindex] = y
+    #print(new_grid)
     
     _, _, _, prediction = forward_prop(W1,b1,W2,b2,new_grid)
-    print(prediction)
-    print("Prediction: ", np.argmax(prediction,0))
+    indexes =  np.argmax(prediction,0)
+    print(indexes)
+    max_val = -1
+    max_index = -1
+    sums = 0
+    for i in range(len(indexes)):
+        calc_val = prediction[i][indexes[i]]
+        print(calc_val)
+        sums+=calc_val
+        if(calc_val> max_val): 
+            max_val = calc_val
+            max_index = i
+            
 
-output(grid)
+    #print("Prediction: ", np.argmax(prediction,0))
+    print("Prediction: ", max_index)
+    print("Confidence: ", round((max_val/sums)*100,2), "%")
 
+# run the main loop
+running = True
+while running:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            mouse_down = True
+        elif event.type == pygame.MOUSEBUTTONUP:
+            mouse_down = False
+            x, y = pygame.mouse.get_pos()
+            grid[x // cell_size][y // cell_size] = 1
+            output(grid)
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_q:
+                grid = [[0 for j in range(grid_size)] for i in range(grid_size)]
+                for x in range(grid_size):
+                    for y in range(grid_size):
+                        pygame.draw.rect(screen, (255, 255, 255), (x * cell_size, y * cell_size, cell_size, cell_size), 0)
+                        pygame.draw.rect(screen, (0, 0, 0), (x * cell_size, y * cell_size, cell_size, cell_size), 1)
+
+                pygame.display.update()
+
+    if mouse_down:
+        x, y = pygame.mouse.get_pos()
+        grid[x // cell_size][y // cell_size] = 1
+        pygame.draw.rect(screen, (5, 5, 5), (x // cell_size * cell_size, y // cell_size * cell_size, cell_size, cell_size))
+        pygame.display.update()
 
 # quit pygame
 pygame.quit()
