@@ -19,7 +19,7 @@ screen = pygame.display.set_mode(window_size)
 screen.fill((255, 255, 255))
 
 # create the grid
-grid_size = 27
+grid_size = 28
 cell_size = window_size[0] // grid_size
 for i in range(grid_size):
     for j in range(grid_size):
@@ -53,25 +53,26 @@ def forward_prop(W1, b1, W2, b2, X):
     return Z1, A1, Z2, A2
 
 def output(grid):
-    W1 = np.loadtxt('./output/npW1_30000_0.04.csv', delimiter = ',')
+    W1 = np.loadtxt('./output/npW1_10000_0.4.csv', delimiter = ',')
     b1 = np.random.rand(10, 1) - 0.5 # so b1 exsist
-    b1x = np.array(np.loadtxt('./output/npb1_30000_0.04.csv'))
+    b1x = np.array(np.loadtxt('./output/npb1_10000_0.4.csv'))
     for i in range(10):
         b1[i] = b1x[i]
-    W2 = np.loadtxt('./output/npW2_30000_0.04.csv', delimiter= ',') 
+    W2 = np.loadtxt('./output/npW2_10000_0.4.csv', delimiter= ',') 
     b2 = np.random.rand(10, 1) - 0.5 # so b2 exsist
-    b2x = np.array(np.loadtxt('./output/npb2_30000_0.04.csv'))
+    b2x = np.array(np.loadtxt('./output/npb2_10000_0.4.csv'))
     for i in range(10):
         b2[i] = b2x[i]
 
     new_grid = [0 for x in range(0,784)]
     for xindex,x in enumerate(grid):
         for yindex,y in enumerate(grid[xindex]):
-            new_grid[yindex*27+xindex] = y
+            new_grid[yindex*28+xindex] = y
     #print(new_grid)
     
     _, _, _, prediction = forward_prop(W1,b1,W2,b2,new_grid)
     indexes =  np.argmax(prediction,0)
+    print(prediction)
     print(indexes)
     max_val = -1
     max_index = -1
