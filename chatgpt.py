@@ -16,14 +16,14 @@ window_size = (540, 540)
 screen = pygame.display.set_mode(window_size)
 
 # fill the screen with a solid color
-screen.fill((255, 255, 255))
+screen.fill((0, 0, 0))
 
 # create the grid
 grid_size = 28
 cell_size = window_size[0] // grid_size
 for i in range(grid_size):
     for j in range(grid_size):
-        pygame.draw.rect(screen, (0, 0, 0), (i * cell_size, j * cell_size, cell_size, cell_size), 1)
+        pygame.draw.rect(screen, (255, 255, 255), (i * cell_size, j * cell_size, cell_size, cell_size), 1)
 
 # update the screen
 pygame.display.update()
@@ -40,8 +40,8 @@ def ReLU(Z):
 
 def softmax(Z):
     """Compute softmax values for each sets of scores in x."""
-    exp = np.exp(Z - np.max(Z)) 
-    return exp / exp.sum(axis=0)
+    #exp = np.exp(Z - np.max(Z)) 
+    return 1 #exp / exp.sum(axis=0)
 
 def forward_prop(W1, b1, W2, b2, X):
     # this function will run the neural network with the current weights and biases (with X as input image)
@@ -64,16 +64,19 @@ def output(grid):
     for i in range(10):
         b2[i] = b2x[i]
 
-    new_grid = [0 for x in range(0,784)]
-    for xindex,x in enumerate(grid):
-        for yindex,y in enumerate(grid[xindex]):
-            new_grid[yindex*28+xindex] = y
-    #print(new_grid)
+    new_grid = np.zeros((784, 1))
+
+    new_grid = np.array(grid).flatten()
+    #new_grid.reshape((28,28))
+    #for yindex,y in enumerate(grid):
+    #    for xindex,x in enumerate(y):
+    #        new_grid[xindex*28+yindex] = x
+    print(new_grid)
     
     _, _, _, prediction = forward_prop(W1,b1,W2,b2,new_grid)
     indexes =  np.argmax(prediction,0)
-    print(prediction)
-    print(indexes)
+    #print(prediction)
+    #print(indexes)
     max_val = -1
     max_index = -1
     sums = 0
@@ -101,22 +104,24 @@ while running:
         elif event.type == pygame.MOUSEBUTTONUP:
             mouse_down = False
             x, y = pygame.mouse.get_pos()
-            grid[x // cell_size][y // cell_size] = 1
+            grid[y // cell_size][x // cell_size] = 1
             output(grid)
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_q:
                 grid = [[0 for j in range(grid_size)] for i in range(grid_size)]
                 for x in range(grid_size):
                     for y in range(grid_size):
-                        pygame.draw.rect(screen, (255, 255, 255), (x * cell_size, y * cell_size, cell_size, cell_size), 0)
-                        pygame.draw.rect(screen, (0, 0, 0), (x * cell_size, y * cell_size, cell_size, cell_size), 1)
+                        pygame.draw.rect(screen, (0, 0, 0), (x * cell_size, y * cell_size, cell_size, cell_size), 0)
+                        pygame.draw.rect(screen, (255, 255, 255), (x * cell_size, y * cell_size, cell_size, cell_size), 1)
 
                 pygame.display.update()
 
     if mouse_down:
         x, y = pygame.mouse.get_pos()
-        grid[x // cell_size][y // cell_size] = 1
-        pygame.draw.rect(screen, (5, 5, 5), (x // cell_size * cell_size, y // cell_size * cell_size, cell_size, cell_size))
+        for i in range(-1, 1):
+            for j in range(-1, 1):
+                grid[(y // cell_size) + i][(x // cell_size) + j] = 255
+                pygame.draw.rect(screen, (255, 255, 255), ((x // cell_size + i) * cell_size, (y // cell_size + j) * cell_size, cell_size, cell_size))
         pygame.display.update()
 
 # quit pygame

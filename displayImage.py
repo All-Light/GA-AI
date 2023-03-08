@@ -43,9 +43,13 @@ mnist_dataloader = MnistDataloader(training_images_filepath, training_labels_fil
 #
 images_2_show = []
 titles_2_show = []
+a = []
+b = 0
 for i in range(0, 10):
     r = random.randint(1, 60000)
     images_2_show.append(x_train[r])
+    a = x_train[r]
+    b = r
     titles_2_show.append('training image [' + str(r) + '] = ' + str(y_train[r]))    
 
 for i in range(0, 5):
@@ -53,4 +57,8 @@ for i in range(0, 5):
     images_2_show.append(x_test[r])        
     titles_2_show.append('test image [' + str(r) + '] = ' + str(y_test[r]))    
 
+
 show_images(images_2_show, titles_2_show)
+print(b)
+print(str(a))
+print(1)
