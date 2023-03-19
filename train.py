@@ -1,11 +1,6 @@
 import numpy as np # simplifies matrixes and linear algebra 
 from datareader import MnistDataloader # See datareader.py 
-#import math # imports math library, holds a lot of essential math 
 import matplotlib.pyplot as plt # for plotting graphs
-
-# TODO credit original video/guide for both training and mnist dataloader!!!!!!!!
-# 
-
 
 # hardcoded paths to training/testing data
 training_images_filepath = './dataset/training/train-images-idx3-ubyte'
@@ -44,7 +39,6 @@ X_test = X_test.reshape(X_test.shape[0],WIDTH*HEIGHT).T  / SCALE_FACTOR
 # A1 = normalized Z1 (between 0 and 1) 
 # Z2 = Values in output layer
 # A2 = normalized Z2 (between 0 and 1) 
-#
 
 
 def init_params(size):
