@@ -10,11 +10,21 @@ pygame.init()
 # Either the model is not perfect or this file is somehow converting something wrong.
 
 # set the window size
+screen_width, screen_height = 540, 540
 window_size = (540, 540)
 
 # create the window
 screen = pygame.display.set_mode(window_size)
+font = pygame.font.SysFont('Calibri', 124)
 
+# Set the timer duration and start time
+timer_duration = 0  # in milliseconds
+start_time = pygame.time.get_ticks()
+
+global text_surface
+global display_text
+text_surface = font.render('', True, (255, 0, 0))
+display_text = True
 # fill the screen with a solid color
 screen.fill((0, 0, 0))
 
@@ -40,8 +50,8 @@ def ReLU(Z):
 
 def softmax(Z):
     """Compute softmax values for each sets of scores in x."""
-    #exp = np.exp(Z - np.max(Z)) 
-    return 1 #exp / exp.sum(axis=0)
+    exp = np.exp(Z - np.max(Z)) 
+    return exp / exp.sum(axis=0)
 
 def forward_prop(W1, b1, W2, b2, X):
     # this function will run the neural network with the current weights and biases (with X as input image)
@@ -66,32 +76,16 @@ def output(grid):
 
     new_grid = np.zeros((784, 1))
 
-    new_grid = np.array(grid).flatten()
-    #new_grid.reshape((28,28))
-    #for yindex,y in enumerate(grid):
-    #    for xindex,x in enumerate(y):
-    #        new_grid[xindex*28+yindex] = x
-    print(new_grid)
-    
-    _, _, _, prediction = forward_prop(W1,b1,W2,b2,new_grid)
-    indexes =  np.argmax(prediction,0)
-    #print(prediction)
-    #print(indexes)
-    max_val = -1
-    max_index = -1
-    sums = 0
-    for i in range(len(indexes)):
-        calc_val = prediction[i][indexes[i]]
-        print(calc_val)
-        sums+=calc_val
-        if(calc_val> max_val): 
-            max_val = calc_val
-            max_index = i
-            
+    new_grid = np.array(grid).flatten().astype('float64')
 
-    #print("Prediction: ", np.argmax(prediction,0))
-    print("Prediction: ", max_index)
-    print("Confidence: ", round((max_val/sums)*100,2), "%")
+    # correct format
+    vect_X = new_grid[:,None]
+    _, _, _, prediction = forward_prop(W1,b1,W2,b2,vect_X)
+    pred =  np.argmax(prediction,0)
+    
+    print("Prediction: ", pred[0])
+    global text_surface
+    text_surface = font.render(str(pred[0]), True, (255, 0, 0))
 
 # run the main loop
 running = True
@@ -106,6 +100,9 @@ while running:
             x, y = pygame.mouse.get_pos()
             grid[y // cell_size][x // cell_size] = 1
             output(grid)
+            start_time = pygame.time.get_ticks()
+            timer_duration = 3000 
+            display_text = True
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_q:
                 grid = [[0 for j in range(grid_size)] for i in range(grid_size)]
@@ -114,15 +111,35 @@ while running:
                         pygame.draw.rect(screen, (0, 0, 0), (x * cell_size, y * cell_size, cell_size, cell_size), 0)
                         pygame.draw.rect(screen, (255, 255, 255), (x * cell_size, y * cell_size, cell_size, cell_size), 1)
 
+                display_text = False
                 pygame.display.update()
+
+    time_elapsed = pygame.time.get_ticks() - start_time
+    if time_elapsed < timer_duration:
+        # Blit the text surface to the screen
+        if display_text:
+            screen.blit(text_surface, (screen_width // 2 - text_surface.get_width() // 2, screen_height // 2 - text_surface.get_height() // 2))
 
     if mouse_down:
         x, y = pygame.mouse.get_pos()
-        for i in range(-1, 1):
-            for j in range(-1, 1):
-                grid[(y // cell_size) + i][(x // cell_size) + j] = 255
-                pygame.draw.rect(screen, (255, 255, 255), ((x // cell_size + i) * cell_size, (y // cell_size + j) * cell_size, cell_size, cell_size))
-        pygame.display.update()
+        clicked_cell_x, clicked_cell_y = x // cell_size, y // cell_size
+        for i in range(-1, 2):
+            for j in range(-1, 2):
+                adjacent_cell_x, adjacent_cell_y = clicked_cell_x + i, clicked_cell_y + j
+                if 0 <= adjacent_cell_x < grid_size and 0 <= adjacent_cell_y < grid_size:
+                    # semi-accurate colors
+                    adjacent_cell_center_x = adjacent_cell_x * cell_size
+                    adjacent_cell_center_y = adjacent_cell_y * cell_size
+                    distance = 1 - (((x - adjacent_cell_center_x) ** 2 + (y - adjacent_cell_center_y) ** 2) ** 0.5) / (((2*cell_size) ** 2 + (2*cell_size) ** 2) ** 0.5)
+                    grid[(y // cell_size) + i][(x // cell_size) + j] = distance
+                    col = int(distance*255)
+                    # white only
+                    #grid[(y // cell_size) + i][(x // cell_size) + j] = 1
+                    #col = 255
+                    #
+                    pygame.draw.rect(screen, (col, col, col), ((x // cell_size + i) * cell_size, (y // cell_size + j) * cell_size, cell_size, cell_size))
+
+    pygame.display.flip()
 
 # quit pygame
 pygame.quit()
